@@ -6,7 +6,7 @@ const router = Router();
 // 获取仓库信息
 router.get('/info', async (req, res) => {
 	try {
-		const { owner, repo } = await req.body;
+		const { owner, repo } = req.query;
 
 		if (!owner || !repo) {
 			return res.status(400).json({
@@ -36,7 +36,7 @@ router.get('/info', async (req, res) => {
 // 获取仓库文件列表
 router.get('/files', async (req, res) => {
 	try {
-		const { owner, repo, branch = 'main' } = req.body;
+		const { owner, repo, branch = 'main' } = req.query;
 
 		if (!owner || !repo) {
 			return res.status(400).json({
