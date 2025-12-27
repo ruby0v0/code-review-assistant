@@ -13,6 +13,24 @@ const llm = new ChatOpenAI({
 	temperature: 0.1,
 });
 
+// const codeReviewTemplate = `
+// 请审查以下{language}代码：
+
+// 文件: {filename}
+// 代码:
+// \`\`\`{language}
+// {code}
+// \`\`\`
+
+// 请从以下方面分析：
+// 1. 代码质量（1-10分）
+// 2. 发现的潜在问题
+// 3. 具体改进建议
+// 4. 安全性和性能考虑
+
+// 请用中文回复，格式清晰。
+// `
+
 const codeReviewTemplate = `
 请对以下代码进行详细的审查，请从以下几个方面进行分析：
 
@@ -34,8 +52,8 @@ const codeReviewTemplate = `
 ## 代码审查报告
 
 ### 1. 代码质量评分（1-10分）
-分数：{score}
-理由：{reason}
+分数：[由AI生成]
+理由：[由AI生成]
 
 ### 2. 发现的问题
 - 问题1：[类型] 描述
