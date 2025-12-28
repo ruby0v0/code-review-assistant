@@ -11,6 +11,9 @@ importers:
       '@langchain/core':
         specifier: ^1.1.8
         version: 1.1.8(openai@6.15.0(zod@4.2.1))
+      '@langchain/deepseek':
+        specifier: ^1.0.3
+        version: 1.0.3(@langchain/core@1.1.8(openai@6.15.0(zod@4.2.1)))
       '@langchain/openai':
         specifier: ^1.2.0
         version: 1.2.0(@langchain/core@1.1.8(openai@6.15.0(zod@4.2.1)))
@@ -44,6 +47,12 @@ packages:
   '@langchain/core@1.1.8':
     resolution: {integrity: sha512-kIUidOgc0ZdyXo4Ahn9Zas+OayqOfk4ZoKPi7XaDipNSWSApc2+QK5BVcjvwtzxstsNOrmXJiJWEN6WPF/MvAw==}
     engines: {node: '>=20'}
+
+  '@langchain/deepseek@1.0.3':
+    resolution: {integrity: sha512-IWKjQHJRc8k3gSCH6pTbRaAGSD63A5YzCNFq58L912Xvd5D2gXpws9oeCYdBIEa3EUlfuMpCaaRkrq4TapDitg==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@langchain/core': ^1.0.0
 
   '@langchain/langgraph-checkpoint@1.0.0':
     resolution: {integrity: sha512-xrclBGvNCXDmi0Nz28t3vjpxSH6UYx6w5XAXSiiB1WEdc2xD2iY/a913I3x3a31XpInUW/GGfXXfePfaghV54A==}
@@ -702,6 +711,13 @@ snapshots:
       - '@opentelemetry/exporter-trace-otlp-proto'
       - '@opentelemetry/sdk-trace-base'
       - openai
+
+  '@langchain/deepseek@1.0.3(@langchain/core@1.1.8(openai@6.15.0(zod@4.2.1)))':
+    dependencies:
+      '@langchain/core': 1.1.8(openai@6.15.0(zod@4.2.1))
+      '@langchain/openai': 1.2.0(@langchain/core@1.1.8(openai@6.15.0(zod@4.2.1)))
+    transitivePeerDependencies:
+      - ws
 
   '@langchain/langgraph-checkpoint@1.0.0(@langchain/core@1.1.8(openai@6.15.0(zod@4.2.1)))':
     dependencies:

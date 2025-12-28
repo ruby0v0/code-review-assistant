@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { ChatOpenAI } from '@langchain/openai';
+// import { ChatOpenAI } from '@langchain/openai';
+import { ChatDeepSeek } from '@langchain/deepseek';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { RunnableSequence } from '@langchain/core/runnables';
 import { StringOutputParser } from '@langchain/core/output_parsers';
@@ -7,11 +8,11 @@ import githubService from '../services/github.service.js';
 
 const router = Router();
 
-const llm = new ChatOpenAI({
-	model: 'gpt-4.1',
-	apiKey: process.env.OPENAI_API_KEY,
-	temperature: 0.1,
-});
+// const llm = new ChatOpenAI({
+// 	model: 'gpt-4.1',
+// 	apiKey: process.env.OPENAI_API_KEY,
+// 	temperature: 0.1,
+// });
 
 // const codeReviewTemplate = `
 // 请审查以下{language}代码：
@@ -30,6 +31,14 @@ const llm = new ChatOpenAI({
 
 // 请用中文回复，格式清晰。
 // `
+
+const llm = new ChatDeepSeek({
+	apiKey: process.env.DEEPSEEK_API_KEY,
+	// model: 'deepseek-reasoner',
+	model: 'deepseek-chat',
+	temperature: 0.1,
+	streaming: true,
+});
 
 const codeReviewTemplate = `
 请对以下代码进行详细的审查，请从以下几个方面进行分析：
@@ -78,6 +87,7 @@ const reviewChain = RunnableSequence.from([
 	new StringOutputParser(),
 ]);
 
+// 单文件审查
 router.post('/single', async (req, res) => {
 	try {
 		const { owner, repo, filepath, branch = 'main', code } = req.body;
@@ -97,7 +107,7 @@ router.post('/single', async (req, res) => {
 			return res.status(400).json({
 				success: false,
 				data: null,
-				error: '无法获取代码内容',
+				message: '无法获取代码内容',
 			});
 		}
 
@@ -123,7 +133,103 @@ router.post('/single', async (req, res) => {
 		res.status(500).json({
 			success: false,
 			data: null,
-			error: error.message || '代码审查失败',
+			message: error.message || '代码审查失败',
+		});
+	}
+});
+
+// 批量文件审查
+router.post('/batch', async (req, res) => {
+	try {
+		const { owner, repo, filepaths, branch = 'main' } = req.body;
+
+		if (!owner || !repo) {
+			return res.status(400).json({
+				success: false,
+				data: null,
+				message: '参数缺失',
+			});
+		}
+
+		const reviews = [];
+
+		if (filepaths && Array.isArray(filepaths)) {
+			for (const filepath of filepaths) {
+				try {
+					const fileContent = await githubService.getFileContent(
+						owner,
+						repo,
+						filepath,
+						branch
+					);
+
+					const review = await reviewChain.invoke({
+						filename: filepath.split('/').pop(),
+						filepath,
+						code: fileContent,
+						language: githubService.getFileType(filepath),
+					});
+
+					reviews.push({
+						filepath,
+						review,
+					});
+				} catch (error) {
+					reviews.push({
+						filepath,
+						error: error.message || '获取文件内容失败',
+					});
+				}
+			}
+		} else {
+			const files = await githubService.getRepositoryFiles(owner, repo, branch);
+			const topFiles = files.slice(0, 5);
+
+			for (const file of topFiles) {
+				try {
+					const content = await githubService.getFileContent(
+						owner,
+						repo,
+						file.path,
+						branch
+					);
+
+					const review = await reviewChain.invoke({
+						filename: file.path.split('/').pop(),
+						filepath: file.path,
+						code: content,
+						language: githubService.getFileType(file.path),
+					});
+
+					reviews.push({
+						filepath: file.path,
+						review,
+					});
+				} catch (error) {
+					reviews.push({
+						filepath: file.path,
+						error: error.message,
+					});
+				}
+			}
+		}
+
+		res.json({
+			success: true,
+			data: {
+				repository: `${owner}/${repo}`,
+				total: reviews.length,
+				reviews,
+				timestamp: new Date().toISOString(),
+			},
+			message: '操作成功',
+		});
+	} catch (error) {
+		console.error('批量审查失败：', error);
+		res.status(500).json({
+			success: false,
+			data: null,
+			message: error.message || '批量审查失败',
 		});
 	}
 });

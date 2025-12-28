@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@langchain/core": "^1.1.8",
+    "@langchain/deepseek": "^1.0.3",
     "@langchain/openai": "^1.2.0",
     "axios": "^1.13.2",
     "cors": "^2.8.5",
