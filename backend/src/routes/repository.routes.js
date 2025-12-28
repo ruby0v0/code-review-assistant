@@ -12,7 +12,7 @@ router.get('/info', async (req, res) => {
 			return res.status(400).json({
 				success: false,
 				data: null,
-				message: '缺少必要参数: owner 或 repo',
+				message: '参数缺失',
 			});
 		}
 
@@ -42,7 +42,7 @@ router.get('/files', async (req, res) => {
 			return res.status(400).json({
 				success: false,
 				data: null,
-				message: '缺少必要参数: owner 或 repo',
+				message: '参数缺失',
 			});
 		}
 
@@ -81,7 +81,7 @@ router.get('/file', async (req, res) => {
 			return res.status(400).json({
 				success: false,
 				data: null,
-				message: '缺少必要参数: owner, repo 或 filepath',
+				message: '参数缺失',
 			});
 		}
 
@@ -100,6 +100,7 @@ router.get('/file', async (req, res) => {
 				language: githubService.getFileType(filepath),
 				size: content ? content.length : 0,
 			},
+			message: '操作成功',
 		});
 	} catch (error) {
 		console.error('获取文件内容失败:', error);

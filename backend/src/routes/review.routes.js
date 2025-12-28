@@ -78,10 +78,6 @@ const reviewChain = RunnableSequence.from([
 	new StringOutputParser(),
 ]);
 
-router.get('/', (req, res) => {
-	res.send('Hello World!');
-});
-
 router.post('/single', async (req, res) => {
 	try {
 		const { owner, repo, filepath, branch = 'main', code } = req.body;
@@ -98,9 +94,11 @@ router.post('/single', async (req, res) => {
 		}
 
 		if (!fileContent) {
-			return res
-				.status(400)
-				.json({ success: false, error: '无法获取代码内容' });
+			return res.status(400).json({
+				success: false,
+				data: null,
+				error: '无法获取代码内容',
+			});
 		}
 
 		const reviewResult = await reviewChain.invoke({
@@ -118,10 +116,15 @@ router.post('/single', async (req, res) => {
 				review: reviewResult,
 				timestamp: new Date().toISOString(),
 			},
+			message: '操作成功',
 		});
-	} catch (reason) {
-		console.error('代码审查失败：', reason);
-		res.status(500).json({ error: '代码审查失败', details: reason.message });
+	} catch (error) {
+		console.error('代码审查失败：', error);
+		res.status(500).json({
+			success: false,
+			data: null,
+			error: error.message || '代码审查失败',
+		});
 	}
 });
 
