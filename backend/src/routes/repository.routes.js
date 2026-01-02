@@ -19,6 +19,7 @@ router.get('/info', async (req, res) => {
 		const info = await githubService.getRepositoryInfo(owner, repo);
 
 		res.json({
+			code: 200,
 			success: true,
 			data: info,
 			message: '操作成功',
@@ -54,6 +55,7 @@ router.get('/files', async (req, res) => {
 		}, {});
 
 		res.json({
+			code: 200,
 			success: true,
 			data: {
 				total: files.length,
@@ -93,6 +95,7 @@ router.get('/file', async (req, res) => {
 		);
 
 		res.json({
+			code: 200,
 			success: true,
 			data: {
 				filepath,

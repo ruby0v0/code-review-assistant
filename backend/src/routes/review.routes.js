@@ -119,6 +119,7 @@ router.post('/single', async (req, res) => {
 		});
 
 		res.json({
+			code: 200,
 			success: true,
 			data: {
 				filepath,
@@ -215,6 +216,7 @@ router.post('/batch', async (req, res) => {
 		}
 
 		res.json({
+			code: 200,
 			success: true,
 			data: {
 				repository: `${owner}/${repo}`,
