@@ -1,14 +1,6 @@
 import type { AxiosResponse } from 'axios'
+import type { ResponseData } from './types'
 import axios from 'axios'
-
-interface ResponseData<T = any> {
-  /** 状态码 */
-  code: number
-  /** 消息 */
-  message: string
-  /** 数据 */
-  data: T
-}
 
 const API_PORT = import.meta.env.VITE_API_PORT ? `:${import.meta.env.VITE_API_PORT}` : ''
 
@@ -16,7 +8,7 @@ const BASE_URL = `${import.meta.env.VITE_API_URL}${API_PORT}${import.meta.env.VI
 
 const instance = axios.create({
   baseURL: BASE_URL,
-  timeout: 30_000,
+  timeout: 120_000,
 })
 
 instance.interceptors.request.use(
