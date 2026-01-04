@@ -126,6 +126,7 @@ router.post('/single', async (req, res) => {
 				content: fileContent,
 				review: reviewResult,
 				timestamp: new Date().toISOString(),
+				language: githubService.getFileType(filepath),
 			},
 			message: '操作成功',
 		});

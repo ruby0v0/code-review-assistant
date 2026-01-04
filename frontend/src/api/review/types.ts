@@ -18,4 +18,5 @@ export interface ReviewFileResult {
   content: string
   review: string
   timestamp: string
+  language: string
 }
