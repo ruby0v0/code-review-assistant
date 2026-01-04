@@ -32,20 +32,6 @@ h1 {
   line-height: 1.1;
 }
 
-pre {
-  overflow: auto;
-  background-color: #fafafa;
-  padding: 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-family: monospace;
-  max-height: 200px;
-}
-
-code {
-  /* white-space: pre-wrap; */
-}
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
