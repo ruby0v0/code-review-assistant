@@ -11,7 +11,7 @@ interface SingleReviewProps {
 
 function SingleReview(props: SingleReviewProps) {
   const [loading, setLoading] = useState(false)
-  const [repositoryInfo, setRepositoryInfo] = useState<null | RepositoryInfo>(null)
+  const [repositoryInfo, setRepositoryInfo] = useState<RepositoryInfo>()
   const [form] = Form.useForm()
   const { onUpdateResult } = props
 

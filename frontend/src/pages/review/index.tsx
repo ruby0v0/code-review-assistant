@@ -8,7 +8,7 @@ import SingleReview from './components/SingleReview'
 const { TabPane } = Tabs
 
 function ReviewPage() {
-  const [reviewResult, setReviewResult] = useState<undefined | ReviewFileResult>()
+  const [reviewResult, setReviewResult] = useState<ReviewFileResult>()
 
   return (
     <>
