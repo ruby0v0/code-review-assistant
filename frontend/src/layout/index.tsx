@@ -43,7 +43,7 @@ function BaseLayout() {
           </Menu>
         </Sider>
         <Layout className="p4">
-          <Content className="overflow-auto rounded-md bg-white p6 shadow-sm">
+          <Content className="overflow-auto rounded-md bg-white p4 shadow-sm">
             <Outlet />
           </Content>
         </Layout>
